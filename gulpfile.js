@@ -81,6 +81,15 @@ gulp.task('runServer', function(cb) {
   });
 });
 
+// Run django server
+gulp.task('runServerPlus', function(cb) {
+  var cmd = spawn('python', ['manage.py', 'runserver_plus'], {stdio: 'inherit'});
+  cmd.on('close', function(code) {
+    console.log('runServer exited with code ' + code);
+    cb(code);
+  });
+});
+
 // Browser sync server for live reload
 gulp.task('browserSync', function() {
     browserSync.init(
@@ -101,5 +110,5 @@ gulp.task('watch', function() {
 
 // Default task
 gulp.task('default', function() {
-    runSequence(['styles', 'scripts', 'imgCompression'], ['runServer', 'browserSync', 'watch']);
+    runSequence(['styles', 'scripts', 'imgCompression'], ['runServerPlus', 'browserSync', 'watch']);
 });
