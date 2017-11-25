@@ -1,7 +1,9 @@
 
 ////////////////////////////////
-		//Setup//
+    //Setup//
 ////////////////////////////////
+
+var browserSyncDelay = 3000
 
 // Plugins
 var gulp = require('gulp'),
@@ -40,7 +42,7 @@ var pathsConfig = function (appName) {
 var paths = pathsConfig();
 
 ////////////////////////////////
-		//Tasks//
+    //Tasks//
 ////////////////////////////////
 
 // Styles autoprefixing and minification
@@ -81,7 +83,7 @@ gulp.task('runServer', function(cb) {
   });
 });
 
-// Run django server
+// Run django server_plus
 gulp.task('runServerPlus', function(cb) {
   var cmd = spawn('python', ['manage.py', 'runserver_plus'], {stdio: 'inherit'});
   cmd.on('close', function(code) {
@@ -98,6 +100,14 @@ gulp.task('browserSync', function() {
     });
 });
 
+// Provices a delayed execution of browserSync, allowing runserver to get going
+// before launching the browser.
+gulp.task('delayedBrowserSync', function(){
+  setTimeout(function(){
+    gulp.start('browserSync')
+  }, browserSyncDelay)
+});
+
 // Watch
 gulp.task('watch', function() {
 
@@ -110,5 +120,5 @@ gulp.task('watch', function() {
 
 // Default task
 gulp.task('default', function() {
-    runSequence(['styles', 'scripts', 'imgCompression'], ['runServerPlus', 'browserSync', 'watch']);
+    runSequence(['styles', 'scripts', 'imgCompression'], ['runServerPlus', 'delayedBrowserSync', 'watch']);
 });
