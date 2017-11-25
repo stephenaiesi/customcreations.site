@@ -3,7 +3,7 @@
     //Setup//
 ////////////////////////////////
 
-var browserSyncDelay = 3000
+var browserSyncDelay = 5000
 
 // Plugins
 var gulp = require('gulp'),
